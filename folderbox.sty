@@ -1,0 +1,263 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{folderbox}[2021/11/28 Folder Box]
+
+% RequirePackage is like usepackage, but can be loaded before documentclass
+
+% tables with additional height parameter and
+% \interrowfill command, essentially a vfill inside the table
+\RequirePackage{tabularht}
+
+% for \ifstrempty
+\RequirePackage{etoolbox}
+
+% ==============================================================================
+% ==============================================================================
+% ==============================================================================
+
+%
+% crop marks
+%
+\usepackage{tikz}
+\usepackage{mwe}
+\usepackage[
+  placement=top,
+  %position={0,0},
+  angle=0,
+  color=black,
+  scale=1,
+  hshift=-11.5mm,
+  vshift=0
+  ]{background}
+
+% empty as default
+\backgroundsetup{contents={}}
+
+\newcommand\mm{5}
+
+% https://tex.stackexchange.com/questions/567040/add-crop-marks-for-business-cards
+
+
+\newcommand\myupmark{%
+    \draw (0,\mm) -- (0,12);
+    \draw (0,10) circle(2);
+    \draw (-2,10) -- (2,10);  % horizontal line of cross
+  }
+\newcommand\myleftmark{%
+    \draw (-10,-2) -- (-10,2);
+    \draw (-10,0) circle(2);
+    \draw (-12,0) -- (-\mm,0);
+  }
+
+% get left margin from geometry package
+\makeatletter
+\newcommand{\Gmlefttmargin}{
+     \Gm@lmargin
+}
+\makeatother
+
+% x offset for start of table
+%\newcommand\folderboxoffset{1.25cm}
+\newcommand\folderboxoffset{\Gmlefttmargin}
+
+
+% widh of table column including margins, parenthtesis for multiplicattion below
+\newcommand\folderboxlabelwidth{(5.15cm + 0.165cm)}
+
+
+\newcommand{\cropmarksCmd}{
+    \begin{minipage}[t]{\textwidth}
+        % top
+        \foreach \x in {0,1,2,3,4,5}{
+            \begin{tikzpicture}[x=1mm, y=1mm, xshift=\folderboxoffset + \x * \folderboxlabelwidth, yshift=-16.7mm, overlay]
+                \myupmark
+            \end{tikzpicture}
+        }
+        %
+        % bottom
+        \foreach \x in {0,1,2,3,4,5}{
+            % y = -1 turns upmark upside down
+            % TODO: Why is is necessary to substract -3.66m from xshift?
+            % TODO: Why is \folderboxoffset not required for xshift, here?
+            \begin{tikzpicture}[x=1mm, y=-1mm, xshift= -3.66mm + \x * \folderboxlabelwidth, yshift=-195.75mm, overlay]
+                \myupmark
+            \end{tikzpicture}
+        }
+        %
+        % top left
+        \begin{tikzpicture}[x=1mm, y=1mm, xshift=-16mm, yshift=-13.9mm, overlay]
+            \myleftmark
+        \end{tikzpicture}
+        %
+        % bottom left
+        \begin{tikzpicture}[x=1mm, y=1mm, xshift=-16mm, yshift=-200mm, overlay]
+            \myleftmark
+        \end{tikzpicture}
+        %
+        % top right
+        \begin{tikzpicture}[x=-1mm, y=1mm, xshift=252mm, yshift=-13.9mm, overlay]
+            \myleftmark
+        \end{tikzpicture}
+        %
+        % bottom right
+        \begin{tikzpicture}[x=-1mm, y=1mm, xshift=252mm, yshift=-200mm, overlay]
+            \myleftmark
+        \end{tikzpicture}
+    \end{minipage}
+}
+
+\DeclareOption{cropmarks}{
+    \backgroundsetup{contents={\cropmarksCmd}}
+}
+\ProcessOptions\relax
+
+% ==============================================================================
+% ==============================================================================
+% ==============================================================================
+
+%
+% Environment for labels of 5 folders
+%
+
+% will create a table with 5 columns, one per label / folder, and two rows
+% first row contains header for the folder, second row the contents of the folder
+% argument 1: name of archive box
+
+\newcounter{currentFolder}[section]
+
+% default values for table decorations
+\newcommand{\folderboxColumnSeparator}{}
+\newcommand{\folderboxToprule}{}
+\newcommand{\folderboxBottomrule}{}
+
+% default font values
+%\newcommand{\folderboxHeaderFont}{}
+%\newcommand{\folderboxBodyFont}{}
+\newcommand{\folderboxHeaderFont}{\huge \bfseries}
+\newcommand{\folderboxBodyFont}{\LARGE}
+
+%
+
+\newcommand{\folderboxDatePrefix}{Stand: }
+
+\newenvironment{folderbox}[2][]
+{
+    %
+    % start \begin{folderbox}
+    %
+
+    \ifstrempty{#1}{
+        % optional argument empty --> default
+        \renewcommand{\folderboxColumnSeparator}{}
+        \renewcommand{\folderboxToprule}{}
+        \renewcommand{\folderboxBottomrule}{}
+    }{
+        % option argument not empty --> show lines in table (as cutting guides)
+        \renewcommand{\folderboxColumnSeparator}{|}
+        \renewcommand{\folderboxToprule}{\hline}
+        \renewcommand{\folderboxBottomrule}{\hline}
+    }
+
+    %
+    % helper to define variables that can contain numbers in their names
+    %
+    \newcommand{\DefineFolderVar}[2]{%
+      \expandafter\newcommand\csname folder-##1\endcsname{##2}%
+    }
+    \newcommand{\RedefineFolderVar}[2]{%
+      \expandafter\renewcommand\csname folder-##1\endcsname{##2}%
+    }
+    \newcommand{\FolderVar}[1]{\csname folder-##1\endcsname}
+
+
+    %
+    % define five header and five content variables for this folderbox
+    %
+    \newcommand{\foldername}{#2}
+
+    \DefineFolderVar{header1}{head1}
+    \DefineFolderVar{header2}{head2}
+    \DefineFolderVar{header3}{head3}
+    \DefineFolderVar{header4}{head4}
+    \DefineFolderVar{header5}{head5}
+    \DefineFolderVar{content1}{content 1}
+    \DefineFolderVar{content2}{content 2}
+    \DefineFolderVar{content3}{content 3}
+    \DefineFolderVar{content4}{content 4}
+    \DefineFolderVar{content5}{content 5}
+
+    %
+    % define counter containing number of next column, i.e. next label, to fill
+    %
+    \setcounter{currentFolder}{0}
+
+    %
+    % define command to fill current column / label (one parameter for header, everything between begin and end in )
+    %
+    \newcommand{\folderCmd}[2]{
+        \stepcounter{currentFolder}
+
+        % concatenate header and value of 'currentFolder' counter as name of folder var
+        \RedefineFolderVar{header\thecurrentFolder}{##1}
+        \RedefineFolderVar{content\thecurrentFolder}{##2}
+    }
+
+    %
+    % finish \begin{folderbox}
+    %
+}
+{
+    %
+    % start \end{folderbox}
+    %
+
+    %
+    % take variables for headers and contents and fill table
+    %
+
+
+    \section*{\foldername \hfill \folderboxDatePrefix \today}
+
+    \begin{tabularht}{0.96\textheight}{
+        \folderboxColumnSeparator p{5.15cm}     % folder 1
+        \folderboxColumnSeparator p{5.15cm}     % folder 2
+        \folderboxColumnSeparator p{5.15cm}     % folder 3
+        \folderboxColumnSeparator p{5.15cm}     % folder 4
+        \folderboxColumnSeparator p{5.15cm}     % folder 5
+        \folderboxColumnSeparator
+    }
+
+    \folderboxToprule
+
+
+    % empty row before header to create padding before toprule
+    %\rule{-1pt}{40pt} % invisible (width =0) horizontal line with 15 pt padding, no line break before header row
+    &&&&\\[0.3cm]
+
+    % header row
+    {\folderboxHeaderFont \FolderVar{header1}}  &
+    {\folderboxHeaderFont \FolderVar{header2}}  &
+    {\folderboxHeaderFont \FolderVar{header3}}  &
+    {\folderboxHeaderFont \FolderVar{header4}}  &
+    {\folderboxHeaderFont \FolderVar{header5}}
+    \\[0.8cm]  % add 0.8 cm space before line break
+
+
+    % content row
+    {\folderboxBodyFont \FolderVar{content1}} &
+    {\folderboxBodyFont \FolderVar{content2}} &
+    {\folderboxBodyFont \FolderVar{content3}} &
+    {\folderboxBodyFont \FolderVar{content4}} &
+    {\folderboxBodyFont \FolderVar{content5}}
+    \\[15.5cm]
+
+    % fill table down to bottom of page
+    \interrowfill
+
+    \folderboxBottomrule
+
+    \end{tabularht}
+
+    %
+    % finish \end{folderbox}
+    %
+}
