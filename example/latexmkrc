@@ -1,0 +1,5 @@
+$out_dir = 'aux';
+$pdflatex = 'lualatex'; # for fontspec package, e.g. Futura font
+$pdf_mode = 1;
+@default_files = ('example.tex');
+ensure_path('TEXINPUTS', '../');

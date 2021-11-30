@@ -1,0 +1,76 @@
+\documentclass[landscape]{scrartcl}
+\usepackage[top=0.5cm, bottom=0.5cm, left=1.3cm, right=1cm]{geometry}
+
+%\usepackage{folderbox}
+\usepackage[cropmarks]{folderbox}
+
+
+
+%
+% Set fonts for labels
+%
+\usepackage{fontspec}
+
+% % pag font
+% \renewcommand{\folderboxHeaderFont}{\fontfamily{pag}\selectfont \LARGE \bfseries}
+% \renewcommand{\folderboxBodyFont}{\fontfamily{pag}\selectfont \large}
+
+
+
+% Futura
+\renewcommand{\folderboxHeaderFont}{\fontspec{Futura Bold} \LARGE \bfseries}
+\renewcommand{\folderboxHeaderFont}{\fontspec{Futura Medium} \huge \bfseries}
+\renewcommand{\folderboxHeaderFont}{\fontspec{Futura Bold} \Huge \bfseries}
+\renewcommand{\folderboxHeaderFont}{\fontspec{Futura Bold} \fontsize{36}{38} \bfseries}
+\renewcommand{\folderboxBodyFont}{\fontspec{Futura Medium} \LARGE}
+
+% Helvetica Neue
+% \renewcommand{\folderboxHeaderFont}{\fontspec{Helvetica Neue Bold} \LARGE \bfseries}
+% \renewcommand{\folderboxBodyFont}{\fontspec{Helvetica Neue Medium} \LARGE}
+
+%
+% Main document
+%
+
+\begin{document}
+
+
+
+\begin{folderbox}{Folder Box 1}
+
+\folderCmd{Bank}{
+
+
+}
+
+\folderCmd{Invoice}{
+
+}
+
+
+\folderCmd{Taxes}{
+
+    2021
+
+    2020
+
+    2019
+
+    2018
+
+}
+
+\folderCmd{School}{
+
+}
+
+\folderCmd{Archive}{
+
+}
+
+\end{folderbox}
+
+
+
+
+\end{document}
