@@ -3,9 +3,15 @@
 
 % RequirePackage is like usepackage, but can be loaded before documentclass
 
-% tables with additional height parameter and
-% \interrowfill command, essentially a vfill inside the table
-\RequirePackage{tabularht}
+\RequirePackage[absolute]{textpos}
+\usepackage{calc}
+
+% no paragraph indents
+\setlength{\parindent}{0pt}
+
+% textblock margin
+\TPMargin{10pt}
+
 
 % for \ifstrempty
 \RequirePackage{etoolbox}
@@ -211,53 +217,21 @@
     %
 
     %
-    % take variables for headers and contents and fill table
+    % take variables for headers and contents and output them
     %
-
 
     \section*{\foldername \hfill \folderboxDatePrefix \today}
 
-    \begin{tabularht}{0.96\textheight}{
-        \folderboxColumnSeparator p{5.15cm}     % folder 1
-        \folderboxColumnSeparator p{5.15cm}     % folder 2
-        \folderboxColumnSeparator p{5.15cm}     % folder 3
-        \folderboxColumnSeparator p{5.15cm}     % folder 4
-        \folderboxColumnSeparator p{5.15cm}     % folder 5
-        \folderboxColumnSeparator
+
+    \newlength{\folderboxwidth}
+    \setlength{\folderboxwidth}{5.57cm}
+
+    \foreach \x in {1,2,3,4,5}{
+        \begin{textblock*}{\folderboxwidth}(\x \folderboxwidth - \folderboxwidth + 13mm,14mm)
+            \renewcommand{\baselinestretch}{1.5}    % increase line spacing
+            {\folderboxHeaderFont \FolderVar{header\x}}
+
+            {\folderboxBodyFont \FolderVar{content\x}}
+        \end{textblock*}
     }
-
-    \folderboxToprule
-
-
-    % empty row before header to create padding before toprule
-    %\rule{-1pt}{40pt} % invisible (width =0) horizontal line with 15 pt padding, no line break before header row
-    &&&&\\[0.3cm]
-
-    % header row
-    {\folderboxHeaderFont \FolderVar{header1}}  &
-    {\folderboxHeaderFont \FolderVar{header2}}  &
-    {\folderboxHeaderFont \FolderVar{header3}}  &
-    {\folderboxHeaderFont \FolderVar{header4}}  &
-    {\folderboxHeaderFont \FolderVar{header5}}
-    \\[0.8cm]  % add 0.8 cm space before line break
-
-
-    % content row
-    {\folderboxBodyFont \FolderVar{content1}} &
-    {\folderboxBodyFont \FolderVar{content2}} &
-    {\folderboxBodyFont \FolderVar{content3}} &
-    {\folderboxBodyFont \FolderVar{content4}} &
-    {\folderboxBodyFont \FolderVar{content5}}
-    \\[15.5cm]
-
-    % fill table down to bottom of page
-    \interrowfill
-
-    \folderboxBottomrule
-
-    \end{tabularht}
-
-    %
-    % finish \end{folderbox}
-    %
 }
