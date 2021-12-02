@@ -14,9 +14,6 @@
 \setlength{\parindent}{0pt}
 
 
-% for \ifstrempty
-\RequirePackage{etoolbox}
-
 % ==============================================================================
 % ==============================================================================
 % ==============================================================================
@@ -116,10 +113,6 @@
 
 \newcounter{currentFolder}[section]
 
-% default values for table decorations
-\newcommand{\folderboxColumnSeparator}{}
-\newcommand{\folderboxToprule}{}
-\newcommand{\folderboxBottomrule}{}
 
 % default font values
 %\newcommand{\folderboxHeaderFont}{}
@@ -137,17 +130,6 @@
     % start \begin{folderbox}
     %
 
-    \ifstrempty{#1}{
-        % optional argument empty --> default
-        \renewcommand{\folderboxColumnSeparator}{}
-        \renewcommand{\folderboxToprule}{}
-        \renewcommand{\folderboxBottomrule}{}
-    }{
-        % option argument not empty --> show lines in table (as cutting guides)
-        \renewcommand{\folderboxColumnSeparator}{|}
-        \renewcommand{\folderboxToprule}{\hline}
-        \renewcommand{\folderboxBottomrule}{\hline}
-    }
 
     %
     % helper to define variables that can contain numbers in their names
