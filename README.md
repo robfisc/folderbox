@@ -23,7 +23,7 @@ The following illustration shows the result: an archive box containing folders, 
 
 ## Introduction
 
-folderbox achieves its solutions by creating one landscape A4 page for five folders (see [Example](#example) below). The number five corresponds both to the capacity of standard archive box (approx. inside dimensions 41 x 32 x 28 cm), and provides enough width to fit five labels of approx. 5 cm next to each other.
+folderbox achieves its goals by creating one landscape A4 page for five folders (see [Example](#example) below). The number five corresponds both to the capacity of standard archive box (approx. inside dimensions 41 x 32 x 28 cm), and provides enough width to fit five labels of approx. 5 cm next to each other.
 The resulting document containing one or multiple pages with labels for boxes simultaneously serves as catalogue that indexes the contents of those boxes.
 
 Personal remark:
@@ -31,8 +31,9 @@ Works well with folder or ring binders with
 
 ## Example
 
-![Example label for one box](./doc/example_label_page.svg)
+![Example label for one box](./example/example_with_cropmarks.svg)
 
+This example is available [with](example/example_with_cropmarks.pdf) and [without](example/example_without_cropmarks.pdf) crop marks as PDF file. The [source tex file](example/example.tex) can be compiled using `latexmk` called from the example folder.
 
 
 ```tex
@@ -52,17 +53,17 @@ Works well with folder or ring binders with
 % one environment per page, one page per 5 folder / one box
 \begin{folderbox}{Folder Box 1}
 
-% one call to \folderCmd per folder
+% one call to \folder per folder
 % first argument corresponds to header, second to content
-\folderCmd{Bank}{
+\folder{Bank}{
     % content of the label goes here
 }
 
-\folderCmd{Invoice}{
+\folder{Invoice}{
 }
 
 
-\folderCmd{Taxes}{
+\folder{Taxes}{
     2021
 
     2020
@@ -72,12 +73,10 @@ Works well with folder or ring binders with
     2018
 }
 
-\folderCmd{School}{}
-
-\folderCmd{Archive}{}
+\folder{School}{}
+\folder{Archive}{}
 
 \end{folderbox}
-
 
 \end{document}
 
@@ -117,16 +116,15 @@ ensure_path('TEXINPUTS', '<path to folder with .sty file>');
     ```
 
 ### Local installation
-TODO: write install skript
+To be done
 
 
 
 
 ## Further Plans
 
-- Replace implementation of labels with tabular by more flexible solution
-- Document .sty file
-- Create examples showing full range of features, i.e. 90 degrees rotated, including graphics, with / without header, different fonts and font sizes
+- Document .sty file (create .dtx file?)
+- Write local install script
 - Decide on configurable parameters (which per document and which per page?)
 - Create PDF package documentation
 - Eventually, create CTAN package
