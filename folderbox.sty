@@ -119,6 +119,8 @@
 %\newcommand{\folderboxBodyFont}{}
 \newcommand{\folderboxHeaderFont}{\huge \bfseries}
 \newcommand{\folderboxBodyFont}{\LARGE}
+\newcommand{\folderboxHeaderTopMargin}{0cm}
+\newcommand{\folderboxBodyTopMargin}{0cm}
 
 %
 
@@ -148,16 +150,17 @@
     %
     \newcommand{\foldername}{#2}
 
-    \DefineFolderVar{header1}{head1}
-    \DefineFolderVar{header2}{head2}
-    \DefineFolderVar{header3}{head3}
-    \DefineFolderVar{header4}{head4}
-    \DefineFolderVar{header5}{head5}
-    \DefineFolderVar{content1}{content 1}
-    \DefineFolderVar{content2}{content 2}
-    \DefineFolderVar{content3}{content 3}
-    \DefineFolderVar{content4}{content 4}
-    \DefineFolderVar{content5}{content 5}
+    % default values for header and content variables
+    \DefineFolderVar{header1}{}
+    \DefineFolderVar{header2}{}
+    \DefineFolderVar{header3}{}
+    \DefineFolderVar{header4}{}
+    \DefineFolderVar{header5}{}
+    \DefineFolderVar{content1}{}
+    \DefineFolderVar{content2}{}
+    \DefineFolderVar{content3}{}
+    \DefineFolderVar{content4}{}
+    \DefineFolderVar{content5}{}
 
     %
     % define counter containing number of next column, i.e. next label, to fill
@@ -192,9 +195,10 @@
     \section*{\foldername \hfill \folderboxDatePrefix \today}
 
     \foreach \x in {1,2,3,4,5}{
-        \begin{textblock*}{\fb@labelwidth}(\x \fb@labelwidth - \fb@labelwidth + 10mm,14mm)
-            \renewcommand{\baselinestretch}{1.5}    % increase line spacing
+        \begin{textblock*}{\fb@labelwidth - 15pt}(\x \fb@labelwidth - \fb@labelwidth + 10mm,14mm)
+            \vspace{\folderboxHeaderTopMargin}
             {\folderboxHeaderFont \FolderVar{header\x}}
+            \vspace{\folderboxBodyTopMargin}
 
             {\folderboxBodyFont \FolderVar{content\x}}
         \end{textblock*}
